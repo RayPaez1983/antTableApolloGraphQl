@@ -1,6 +1,6 @@
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper";
+import { Autoplay, Pagination, Navigation, EffectCube } from "swiper";
 
 import foto1 from "../../images/guatape1.jpeg";
 import foto2 from "../../images/medellinday.jpeg";
@@ -53,16 +53,18 @@ const Home = () => {
         centeredSlides={true}
         spaceBetween={100}
         slidesPerView={1}
-        // autoplay={{
-        //   delay: 2500,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+          
+        }}
+        
         pagination={{
           clickable: true,
         }}
         navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper"
+        modules={[Autoplay, Pagination, Navigation, EffectCube]}
+        
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
       >
