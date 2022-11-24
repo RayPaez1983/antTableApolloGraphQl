@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-const Burger = () => {
-  const [open, setOpen] = useState(false);
+interface BurgerProps{
+  setOpen: any;
+ open: boolean
+}
+
+const Burger = ({setOpen, open}: BurgerProps) => {
+  
 
   const StyledBurger = styled.div`
   width: 2rem;
@@ -26,16 +31,15 @@ const Burger = () => {
     border-radius: 10px;
     transform-origin: 1px;
     transition: all 0.3s linear;
-    background: ${(props) =>
-      // @ts-ignore
-      props.open ? "" : "red"};
+    background: red;
+    
      
     
     &:nth-child(1) {
       
-      transform:${(props) =>
+      transform: ${(props) =>
         // @ts-ignore
-        props.open ? "rotate(65deg)" : "rotate(0`)"} !importan
+        props.open ? "rotate(45deg)" : "rotate(0)"};
       background: red;
     }
     &:nth-child(2) {
@@ -54,6 +58,7 @@ const Burger = () => {
         props.open ? "rotate(-45deg)" : "rotate(0)"};
       background: red;
     }
+ 
    
   }
 `;

@@ -2,10 +2,12 @@ import { Fragment, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import styled from "styled-components";
 import flag from "../../images/flag.jpg";
-import Burger from './burger'
+import Burger from "./burger";
 
 const NavMenu = () => {
   const [sticky, setSticky] = useState(false);
+  
+  const [open, setOpen] = useState(false);
 
   const navBarSticky = () => {
     if (window.scrollY >= 232) {
@@ -17,12 +19,11 @@ const NavMenu = () => {
   console.log(window.scrollY, "que vaina ala");
 
   window.addEventListener("scroll", navBarSticky);
- 
 
   const Container = styled.div`
     display: flex;
-    flex-direction: column;
-  justify-content: space-between;
+   
+  
     position: relative;
     height: 150px;
     width: 100%;
@@ -36,33 +37,38 @@ const NavMenu = () => {
     }
   `;
   const TitleNav = styled.h1`
-    width:50%;
+    width: 50%;
     color: darkblue;
     margin: 0px;
     margin-left: 20px;
-    
-    font-weight:300;
+
+    font-weight: 300;
   `;
   const List = styled.ul`
-  display: flex;
-  justify-content: space-evenly;
-  list-style-type: none;
-  a {
-    text-decoration: none;
-    color: gold;
-  }
+    margin:0;
+    margin-top: 10px;
+    margin-right: 20px;
+    padding:0;
+    justify-content: space-evenly;
+    list-style-type: none;
+    a {
+      text-decoration: none;
+      color: gold;
+    }
+
+    @media (max-width: 768px) {
+   
+    }
+  `;
+
+  console.log(open, 'open it');
   
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
   return (
     <>
       <Container>
-
-         
-        
-          {/* <nav className="tres">
+      
+        <TitleNav>Expore The Beautiful Antioquia</TitleNav>
+        {open? 
           <List>
             <li>
               <Link to="/guatape">Guatape</Link>
@@ -77,17 +83,11 @@ const NavMenu = () => {
               <Link to="/sabaneta">Sabaneta</Link>
             </li>
           </List>
-        </nav> */}
-        <TitleNav>Expore The Beautiful Antioquia</TitleNav>
-        <Burger/>
-
-  
-     
-      
+       : null }
+        <Burger setOpen={setOpen} open={open}/>
+          
       </Container>
       <Outlet />
-     
-   
     </>
   );
 };
