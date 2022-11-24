@@ -1,13 +1,25 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import styled from "styled-components";
-import flag from "../../images/flag.jpg";
+
 import Burger from "./burger";
 
 const NavMenu = () => {
   const [sticky, setSticky] = useState(false);
-  
+
   const [open, setOpen] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth);
+  const breakpoint = 768;
+  useEffect(() => {
+    const handleResizeWindow = () => setWidth(window.innerWidth);
+    // subscribe to window resize event "onComponentDidMount"
+    window.addEventListener("resize", handleResizeWindow);
+    return () => {
+      // unsubscribe "onComponentDestroy"
+      window.removeEventListener("resize", handleResizeWindow);
+    };
+  }, [window.innerWidth]);
+  console.log(width, "myu with");
 
   const navBarSticky = () => {
     if (window.scrollY >= 232) {
@@ -16,14 +28,12 @@ const NavMenu = () => {
       setSticky(false);
     }
   };
-  console.log(window.scrollY, "que vaina ala");
 
   window.addEventListener("scroll", navBarSticky);
 
   const Container = styled.div`
     display: flex;
-   
-  
+
     position: relative;
     height: 150px;
     width: 100%;
@@ -45,30 +55,33 @@ const NavMenu = () => {
     font-weight: 300;
   `;
   const List = styled.ul`
-    margin:0;
-    margin-top: 10px;
+    margin: 0;
+   
     margin-right: 20px;
-    padding:0;
-    justify-content: space-evenly;
+    padding: 0;
+
     list-style-type: none;
+    display: flex;
+    column-gap: 20px;
+    font-size: 25px;
+
     a {
       text-decoration: none;
       color: gold;
     }
 
     @media (max-width: 768px) {
-   
+      display: block;
     }
   `;
 
-  console.log(open, 'open it');
-  
+  console.log(open, "open it");
+
   return (
     <>
       <Container>
-      
         <TitleNav>Expore The Beautiful Antioquia</TitleNav>
-        {open? 
+        {open || width > breakpoint ? (
           <List>
             <li>
               <Link to="/guatape">Guatape</Link>
@@ -83,9 +96,8 @@ const NavMenu = () => {
               <Link to="/sabaneta">Sabaneta</Link>
             </li>
           </List>
-       : null }
-        <Burger setOpen={setOpen} open={open}/>
-          
+        ) : null}
+        <Burger setOpen={setOpen} open={open} />
       </Container>
       <Outlet />
     </>
