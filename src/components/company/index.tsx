@@ -19,6 +19,7 @@ const Companies = () => {
       </div>
     );
   }
+  console.log(rowSelection, 'ojala sea fuerte');
   return (
     <CustomTable
       rowSelection={rowSelection}

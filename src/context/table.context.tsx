@@ -50,12 +50,12 @@ export const TABLE_ACTIONS_TYPE = {
 };
 export const tableContext = (state: object, action: any) => {
   const { type, payload } = action;
-  console.log(payload, 'my action');
+  console.log(payload.rowsDisplay, 'que sons');
   switch (type) {
     case TABLE_ACTIONS_TYPE.SET_DATA:
       return { ...state, ...payload };
     case TABLE_ACTIONS_TYPE.SET_ROW_TO_DISPLAY:
-      return { ...state, ...payload };
+      return { ...state, ...payload.rowsDisplay };
     default:
       throw new Error(`Wrong type ${type} in userReducer`);
   }
@@ -84,17 +84,18 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
   const randomColumns = (cols: any) => {
     setCompaniesCol(cols);
   };
-  const handleSetData = (setCompaniesData: any) => {
+  const handleSetData = () => {
     dispatch({
       type: TABLE_ACTIONS_TYPE.SET_DATA,
       payload: {
-        companiesData: setCompaniesData,
+        companiesData: data,
       },
     });
   };
   useEffect(() => {
-    handleSetData(data);
-  }, [data]);
+    handleSetData();
+  }, []);
+
   const rowsDisplayedFilter = (dataNumber: number) => {
     dispatch({
       type: TABLE_ACTIONS_TYPE.SET_ROW_TO_DISPLAY,

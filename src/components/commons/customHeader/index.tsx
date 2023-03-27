@@ -39,7 +39,7 @@ const CustomHeader = () => {
   return (
     <StyledHeader data-testid='custom-header-id'>
       <Row align='middle' data-testid='custom-header-row-container-id'>
-        <StyledTitle>LOGO</StyledTitle>
+        <StyledTitle>Raymonds Tables</StyledTitle>
         <CustomExtendedMenu />
         <Col>
           <Space align='center' size='large' data-testid='custom-header-space-container-id'>

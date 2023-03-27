@@ -35,7 +35,7 @@ const CustomTable = ({ data, columns }: CustomTableTypes) => {
   useEffect(() => {
     randomColumns(columns);
   }, [columns]);
-
+  console.log(rowsDisplay, 'vamos ramon');
   const components = {
     header: {
       cell: ResizableTitle,
