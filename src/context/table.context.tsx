@@ -55,7 +55,7 @@ export const tableContext = (state: object, action: any) => {
     case TABLE_ACTIONS_TYPE.SET_DATA:
       return { ...state, ...payload };
     case TABLE_ACTIONS_TYPE.SET_ROW_TO_DISPLAY:
-      return { ...state, ...payload.rowsDisplay };
+      return { ...state, rowsDisplay: payload.rowsDisplay };
     default:
       throw new Error(`Wrong type ${type} in userReducer`);
   }
@@ -103,8 +103,8 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
         rowsDisplay: dataNumber,
       },
     });
-    console.log(dataNumber, rowsDisplay, 'que estp');
   };
+  console.log(rowsDisplay, 'que estp', companiesData);
   const handletableMovement = () => {
     setMoveToRightTable(!moveToRightTable);
   };

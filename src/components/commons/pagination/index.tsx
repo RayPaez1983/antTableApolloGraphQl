@@ -41,7 +41,6 @@ const CustomPagination = ({
   useEffect(() => {
     form.setFieldsValue({ page: pageWatcher });
   }, [pageWatcher]);
-  console.log(currentPage, 'que es esto', totalPage, currentPage === totalPage);
   return (
     <>
       {' '}
