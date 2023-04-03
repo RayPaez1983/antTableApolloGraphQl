@@ -132,7 +132,6 @@ const CustomTable = ({ data, columns }: CustomTableTypes) => {
       onResize: handleResize(index),
     }),
   }));
-  console.log(rowsDisplay);
   return (
     <StyledCol span={24} moveToRight={moveToRightTable}>
       {noSelectedRowModalElement}

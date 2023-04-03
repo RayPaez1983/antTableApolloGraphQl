@@ -2,6 +2,8 @@ import React, { createContext, ReactNode, useEffect, useMemo, useReducer, useSta
 import { columnsSelected } from 'src/utils/tables/selectTableOptions/companiesOptions';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_COMPANIES } from 'src/components/company/queries';
+import { CompaniesTypes } from 'types/companiesTypes';
+import { ColumnsType } from 'antd/lib/table';
 
 interface TableContextProviderProps {
   children: ReactNode;
@@ -22,12 +24,12 @@ interface InitialStateProps {
   totalPages: (pages: number) => void;
   currentPage: number;
   totalPage: number;
-  handleSetCompaniesCol: (data: any) => void;
-  randomColumns: (cols: any) => void;
+  handleSetCompaniesCol: (data: ColumnsType) => void;
+  randomColumns: (cols: ColumnsType) => void;
 }
 
 export const initialState: InitialStateProps = {
-  selectedColumns: [],
+  selectedColumns: columnsSelected,
   handleColumnSelect: () => {},
   filteredColumns: [],
   companiesData: { getCompanies: [] },
@@ -47,54 +49,73 @@ export const initialState: InitialStateProps = {
 export const TABLE_ACTIONS_TYPE = {
   SET_DATA: 'SET_DATA',
   SET_ROW_TO_DISPLAY: 'SET_ROW_TO_DISPLAY',
+  SET_MOVE_TO_RIGTH: 'SET_MOVE_TO_RIGTH',
+  SET_COMPANIES_COL: 'SET_COMPANIES_COL',
+  SET_SELECTED_COLUMNS: 'SET_SELECTED_COLUMNS',
 };
 export const tableContext = (state: object, action: any) => {
   const { type, payload } = action;
-  console.log(payload.rowsDisplay, 'que sons');
+  console.log(payload, 'bebe');
   switch (type) {
     case TABLE_ACTIONS_TYPE.SET_DATA:
       return { ...state, ...payload };
     case TABLE_ACTIONS_TYPE.SET_ROW_TO_DISPLAY:
       return { ...state, rowsDisplay: payload.rowsDisplay };
+    case TABLE_ACTIONS_TYPE.SET_MOVE_TO_RIGTH:
+      return { ...state, moveToRightTable: payload.moveToRightTable };
+    case TABLE_ACTIONS_TYPE.SET_COMPANIES_COL:
+      return { ...state, companiesCol: payload.companiesCol };
+    case TABLE_ACTIONS_TYPE.SET_SELECTED_COLUMNS:
+      return { ...state, selectedColumns: payload.selectedColumns };
     default:
       throw new Error(`Wrong type ${type} in userReducer`);
   }
 };
-
 const TableContext = createContext(initialState);
 
 const TableContextProvider: React.FC<TableContextProviderProps> = ({ children }) => {
-  const [moveToRightTable, setMoveToRightTable] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [companiesCol, setCompaniesCol] = useState([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedColumns, setSelectedColumns] = useState(columnsSelected);
+
+  const { data } = useQuery(GET_ALL_COMPANIES);
+
+  const [
+    { companiesData, rowsDisplay, moveToRightTable, companiesCol, selectedColumns },
+    dispatch,
+  ] = useReducer(tableContext, initialState);
   const filteredColumns = companiesCol.filter((column: any) =>
     selectedColumns.includes(column.key),
   );
-  const { data } = useQuery(GET_ALL_COMPANIES);
 
-  const [{ companiesData, rowsDisplay }, dispatch] = useReducer(tableContext, initialState);
   const handleColumnSelect = (value: string[]) => {
-    setSelectedColumns(value);
+    dispatch({
+      type: TABLE_ACTIONS_TYPE.SET_SELECTED_COLUMNS,
+      payload: {
+        selectedColumns: value,
+      },
+    });
   };
 
-  const randomColumns = (cols: any) => {
-    setCompaniesCol(cols);
+  const randomColumns = (cols: ColumnsType) => {
+    dispatch({
+      type: TABLE_ACTIONS_TYPE.SET_COMPANIES_COL,
+      payload: {
+        companiesCol: cols,
+      },
+    });
   };
-  const handleSetData = () => {
+
+  const handleSetData = (dataTomap: CompaniesTypes) => {
     dispatch({
       type: TABLE_ACTIONS_TYPE.SET_DATA,
       payload: {
-        companiesData: data,
+        companiesData: dataTomap,
       },
     });
   };
   useEffect(() => {
-    handleSetData();
-  }, []);
+    handleSetData(data);
+  }, [data]);
 
   const rowsDisplayedFilter = (dataNumber: number) => {
     dispatch({
@@ -104,10 +125,15 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
       },
     });
   };
-  console.log(rowsDisplay, 'que estp', companiesData);
   const handletableMovement = () => {
-    setMoveToRightTable(!moveToRightTable);
+    dispatch({
+      type: TABLE_ACTIONS_TYPE.SET_MOVE_TO_RIGTH,
+      payload: {
+        moveToRightTable: !moveToRightTable,
+      },
+    });
   };
+
   const handleSetCompaniesCol = () => {
     companiesData(data);
   };
