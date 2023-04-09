@@ -10,6 +10,7 @@ interface TableContextProviderProps {
 }
 
 interface InitialStateProps {
+  pagination: { current: number; pageSize: number };
   selectedColumns: string[];
   filteredColumns: object[];
   handleColumnSelect: (value: string[]) => void;
@@ -19,16 +20,21 @@ interface InitialStateProps {
   rowsDisplayedFilter: (data: number) => void;
   moveToRightTable: boolean;
   handletableMovement: () => void;
-  enterPage: (pge: number) => void;
   navPagesHandle: (fn: string) => void;
   totalPages: (pages: number) => void;
   currentPage: number;
   totalPage: number;
+  nextPagesFetch: () => void;
+  backPagesFetch: () => void;
+  enterPage: (pge: number, totalPage: number) => void;
+  lastPagesFetch: (totalPage: number) => void;
+  firstPagesFetch: (totalPage: number) => void;
   handleSetCompaniesCol: (data: ColumnsType) => void;
   randomColumns: (cols: ColumnsType) => void;
 }
 
 export const initialState: InitialStateProps = {
+  pagination: { current: 1, pageSize: 25 },
   selectedColumns: columnsSelected,
   handleColumnSelect: () => {},
   filteredColumns: [],
@@ -39,10 +45,14 @@ export const initialState: InitialStateProps = {
   moveToRightTable: false,
   handletableMovement: () => {},
   currentPage: 1,
-  enterPage: () => {},
   totalPages: () => {},
   navPagesHandle: () => {},
   totalPage: 1,
+  nextPagesFetch: () => {},
+  backPagesFetch: () => {},
+  enterPage: () => {},
+  lastPagesFetch: () => {},
+  firstPagesFetch: () => {},
   handleSetCompaniesCol: () => {},
   randomColumns: () => {},
 };
@@ -52,10 +62,11 @@ export const TABLE_ACTIONS_TYPE = {
   SET_MOVE_TO_RIGTH: 'SET_MOVE_TO_RIGTH',
   SET_COMPANIES_COL: 'SET_COMPANIES_COL',
   SET_SELECTED_COLUMNS: 'SET_SELECTED_COLUMNS',
+  SET_NEXT_PAGE: 'SET_NEXT_PAGE',
 };
 export const tableContext = (state: object, action: any) => {
   const { type, payload } = action;
-  console.log(payload, 'bebe');
+  console.log(payload, 'que es esto');
   switch (type) {
     case TABLE_ACTIONS_TYPE.SET_DATA:
       return { ...state, ...payload };
@@ -67,6 +78,8 @@ export const tableContext = (state: object, action: any) => {
       return { ...state, companiesCol: payload.companiesCol };
     case TABLE_ACTIONS_TYPE.SET_SELECTED_COLUMNS:
       return { ...state, selectedColumns: payload.selectedColumns };
+    case TABLE_ACTIONS_TYPE.SET_NEXT_PAGE:
+      return { ...state, ...payload };
     default:
       throw new Error(`Wrong type ${type} in userReducer`);
   }
@@ -76,16 +89,35 @@ const TableContext = createContext(initialState);
 const TableContextProvider: React.FC<TableContextProviderProps> = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [page, setpage] = useState({ current: 1, pageSize: 25 });
+
+  const backPagesFetch = () => {
+    if (page.current > 1) setpage({ current: page.current - 1, pageSize: page.pageSize - 25 });
+  };
+  const lastPagesFetch = (totalPages: number) => {
+    if (page.current < totalPages) setpage({ current: totalPages, pageSize: page.pageSize });
+  };
+  const firstPagesFetch = (totalPages: number) => {
+    setpage({ current: totalPages - totalPages + 1, pageSize: page.pageSize });
+  };
 
   const { data } = useQuery(GET_ALL_COMPANIES);
 
   const [
-    { companiesData, rowsDisplay, moveToRightTable, companiesCol, selectedColumns },
+    { companiesData, rowsDisplay, moveToRightTable, companiesCol, selectedColumns, pagination },
     dispatch,
   ] = useReducer(tableContext, initialState);
   const filteredColumns = companiesCol.filter((column: any) =>
     selectedColumns.includes(column.key),
   );
+  const nextPagesFetch = () => {
+    dispatch({
+      type: TABLE_ACTIONS_TYPE.SET_NEXT_PAGE,
+      payload: {
+        pagination: { current: page.current + 1, pageSize: page.pageSize + 25 },
+      },
+    });
+  };
 
   const handleColumnSelect = (value: string[]) => {
     dispatch({
@@ -173,6 +205,7 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
   };
   const tableValues = useMemo(
     () => ({
+      pagination,
       companiesData,
       companiesCol,
       rowsDisplay,
@@ -181,6 +214,10 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
       handletableMovement,
       currentPage,
       enterPage,
+      nextPagesFetch,
+      backPagesFetch,
+      lastPagesFetch,
+      firstPagesFetch,
       totalPage,
       totalPages,
       navPagesHandle,
@@ -193,6 +230,7 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
     }),
     [
       {
+        pagination,
         companiesData,
         companiesCol,
         rowsDisplay,
@@ -201,6 +239,10 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
         handletableMovement,
         currentPage,
         enterPage,
+        nextPagesFetch,
+        backPagesFetch,
+        lastPagesFetch,
+        firstPagesFetch,
         totalPage,
         totalPages,
         navPagesHandle,

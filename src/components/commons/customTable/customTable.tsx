@@ -14,7 +14,6 @@ const CustomTable = ({ data, columns }: CustomTableTypes) => {
   const {
     rowsDisplay,
     moveToRightTable,
-    enterPage,
     totalPages,
     handleSetCompaniesCol,
     randomColumns,
@@ -146,9 +145,6 @@ const CustomTable = ({ data, columns }: CustomTableTypes) => {
             pageSize: rowsDisplay,
             position: ['topRight'],
             simple: true,
-            onChange: (e: number) => {
-              enterPage(e);
-            },
             current: pagination.current,
             showTotal: (total) => totalPages(Math.ceil(total / rowsDisplay))!,
           }}

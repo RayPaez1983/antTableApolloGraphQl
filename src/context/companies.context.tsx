@@ -15,6 +15,7 @@ interface CompaniesContextProviderProps {
 
 interface InitialStateProps {
   companiesData: { getCompanies: [] };
+  getCompanies: () => void;
   pagination: { current: number; pageSize: number };
   companiesCol: object[];
   handleAllDataSelection: (index: any) => void;
@@ -37,6 +38,7 @@ interface InitialStateProps {
 
 const initialState: InitialStateProps = {
   companiesData: { getCompanies: [] },
+  getCompanies: () => {},
   companiesCol: [],
   handleAllDataSelection: () => {},
   noSelectedRowModal: false,
@@ -55,6 +57,9 @@ const initialState: InitialStateProps = {
   enterPage: () => {},
   lastPagesFetch: () => {},
   firstPagesFetch: () => {},
+};
+export const TABLE_ACTIONS_TYPE = {
+  SET_DATA: 'SET_DATA',
 };
 
 const CompaniesContext = createContext(initialState);
@@ -239,6 +244,7 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
   const companiesValue = useMemo(
     () => ({
       companiesData,
+      getCompanies,
       companiesCol,
       handleAllDataSelection,
       noSelectedRowModal,
@@ -262,6 +268,7 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
     [
       {
         companiesData,
+        getCompanies,
         companiesCol,
         handleAllDataSelection,
         noSelectedRowModal,
