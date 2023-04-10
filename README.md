@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## This is a tranning project
+
+In this table project you can resize the columns and the drag and drop the columns and relocated
+
 ## Conventional Commits
 
 We are using conventional commits to keep an standard for the branch names.
