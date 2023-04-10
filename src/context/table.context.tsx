@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_COMPANIES } from 'src/components/company/queries';
 import { CompaniesTypes } from 'types/companiesTypes';
 import { ColumnsType } from 'antd/lib/table';
+import { TableTypes } from 'types/tableTypes';
 
 interface TableContextProviderProps {
   children: ReactNode;
@@ -24,7 +25,7 @@ interface InitialStateProps {
   totalPages: (pages: number) => void;
   currentPage: number;
   totalPage: number;
-  nextPagesFetch: () => void;
+  nextPagesFetch2: () => void;
   backPagesFetch: () => void;
   enterPage: (pge: number, totalPage: number) => void;
   lastPagesFetch: (totalPage: number) => void;
@@ -48,7 +49,7 @@ export const initialState: InitialStateProps = {
   totalPages: () => {},
   navPagesHandle: () => {},
   totalPage: 1,
-  nextPagesFetch: () => {},
+  nextPagesFetch2: () => {},
   backPagesFetch: () => {},
   enterPage: () => {},
   lastPagesFetch: () => {},
@@ -107,15 +108,13 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
     { companiesData, rowsDisplay, moveToRightTable, companiesCol, selectedColumns, pagination },
     dispatch,
   ] = useReducer(tableContext, initialState);
-  const filteredColumns = companiesCol.filter((column: any) =>
+  const filteredColumns = companiesCol.filter((column: TableTypes) =>
     selectedColumns.includes(column.key),
   );
-  const nextPagesFetch = () => {
+  const nextPagesFetch2 = () => {
     dispatch({
       type: TABLE_ACTIONS_TYPE.SET_NEXT_PAGE,
-      payload: {
-        pagination: { current: page.current + 1, pageSize: page.pageSize + 25 },
-      },
+      payload: { pagination: { current: page.current + 1, pageSize: page.pageSize + 25 } },
     });
   };
 
@@ -166,8 +165,13 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
     });
   };
 
-  const handleSetCompaniesCol = () => {
-    companiesData(data);
+  const handleSetCompaniesCol = (cols: ColumnsType) => {
+    dispatch({
+      type: TABLE_ACTIONS_TYPE.SET_COMPANIES_COL,
+      payload: {
+        companiesCol: cols,
+      },
+    });
   };
   const navPagesHandle = (fn: string) => {
     switch (fn) {
@@ -214,7 +218,7 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
       handletableMovement,
       currentPage,
       enterPage,
-      nextPagesFetch,
+      nextPagesFetch2,
       backPagesFetch,
       lastPagesFetch,
       firstPagesFetch,
@@ -239,7 +243,7 @@ const TableContextProvider: React.FC<TableContextProviderProps> = ({ children })
         handletableMovement,
         currentPage,
         enterPage,
-        nextPagesFetch,
+        nextPagesFetch2,
         backPagesFetch,
         lastPagesFetch,
         firstPagesFetch,

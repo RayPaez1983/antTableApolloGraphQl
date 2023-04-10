@@ -5,7 +5,7 @@ import { Form, Input, InputNumber } from 'antd';
 interface EditableCellProps {
   editing: boolean;
   dataIndex: string;
-  title: any;
+  title: string;
   inputType: 'number' | 'text';
   record: CompaniesTypes;
   index: number;
