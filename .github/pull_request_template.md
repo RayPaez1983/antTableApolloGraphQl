@@ -4,7 +4,7 @@ Please add a small description of your new featured or fix.
 
 ### Jira Ticket
 
-[[F20-YourTicketNumber](https://repfabric.atlassian.net/browse/F20-examplelink)]
+[[YourTicketNumber]()]
 
 ### How Has This Been Tested?
 

@@ -1,8 +1,7 @@
-/* eslint-disable react/jsx-no-undef */
 import React from 'react';
-// eslint-disable-next-line no-duplicate-imports
 import { Select } from 'antd';
 import { TableOutlined } from '@ant-design/icons';
+import { TableTypes } from 'types/tableTypes';
 
 interface CustomSelectProps {
   options?: [];
@@ -49,11 +48,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         onChange={handleColumnSelect}
         defaultValue={['Columns']}
       >
-        {columnsDefault?.map((column: any) => (
+        {columnsDefault?.map((column: TableTypes) => (
           <Option
             style={{ width: '130px', height: '36px' }}
             key={column.key}
-            value={column.key.replace('delete', '')}
+            value={column.key && column.key.replace('delete', '')}
             data-testid='columns-options-id'
           >
             {column.title}

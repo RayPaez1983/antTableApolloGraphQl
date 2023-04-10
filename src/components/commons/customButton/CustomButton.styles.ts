@@ -8,8 +8,8 @@ const StyledCustomButton = styled(Button).attrs((props) => ({
   &&& {
     border: none !important;
     &:hover {
-      color: ${(props) => props.ghost && !props.danger && '#000a68 !important'};
-      background-color: ${(props) => props.ghost && '#dcdffb !important'};
+      color: ${(props) => props.ghost && !props.danger && '#fffde1 !important'};
+      background-color: ${(props) => props.ghost && ' #1fffff  !important'};
     }
   }
 `;

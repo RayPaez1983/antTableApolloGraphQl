@@ -20,7 +20,7 @@ interface CustomButtonProps {
   ClassName?: string;
   dataTestId?: string;
   style?: object;
-  tooltipText?: any;
+  tooltipText?: string;
   tooltipColor?: string;
   placement?: string;
 }
@@ -46,7 +46,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   tooltipColor,
   placement,
 }) => (
-  <CustomToolTip title={tooltipText} color={tooltipColor} placement={placement}>
+  <CustomToolTip title={tooltipText as string} color={tooltipColor} placement={placement}>
     <StyledCustomButton
       type={type || 'default'}
       shape={shape || 'default'}

@@ -22,18 +22,12 @@ import { GET_ALL_COMPANIES } from 'src/components/company/queries';
 import { useQuery } from '@apollo/client';
 import CustomPagination from '../../pagination/index';
 import CustomSelect from '../../customSelect';
-import {
-  StyledTitle,
-  StyledSearch,
-  StyledSpace,
-  StyledRow,
-  StyledImage,
-} from './CompanySubHeader.styles';
+import { StyledSearch, StyledSpace, StyledRow, StyledImage } from './CompanySubHeader.styles';
 import CustomButton from '../../customButton';
 
 const CompanySubHeader = () => {
   const subHeaderStyles = {
-    background: '#000a68',
+    background: '#79c2d0',
     color: 'white',
     height: 'auto',
     padding: '2px 20px',
@@ -69,9 +63,6 @@ const CompanySubHeader = () => {
   return (
     <StyledSpace data-testid='company-sub-header-id' direction='vertical' size='middle'>
       <StyledRow data-testid='styled-row-sub-header-id' align='middle' justify='space-between'>
-        <StyledTitle data-testid='styled-sub-header-title-id' level={3}>
-          Companies
-        </StyledTitle>
         <StyledSearch
           data-testid='company-sub-header-search-id'
           placeholder='Search Companies'

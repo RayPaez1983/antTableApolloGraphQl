@@ -10,8 +10,8 @@ const StyledMenu = styled(Menu)`
       margin: auto;
       border-radius: 8px !important;
       &:hover {
-        color: #000a68 !important;
-        background-color: #dcdffb !important;
+        color: #fffde1 !important;
+        background-color: #1fffff !important;
         div {
           color: #000a68 !important;
         }

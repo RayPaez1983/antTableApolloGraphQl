@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/no-unstable-nested-components */
 import React, { useContext, useEffect } from 'react';
 import { Table, Space, Typography } from 'antd';
 import { ExclamationCircleFilled, CheckCircleOutlined } from '@ant-design/icons';
@@ -14,12 +16,12 @@ const CustomTable = ({ data, columns }: CustomTableTypes) => {
   const {
     rowsDisplay,
     moveToRightTable,
+    enterPage,
     totalPages,
     handleSetCompaniesCol,
     randomColumns,
     filteredColumns,
   } = useContext(TableContext);
-
   const {
     handleAllDataSelection,
     noSelectedRowModal,
@@ -145,6 +147,9 @@ const CustomTable = ({ data, columns }: CustomTableTypes) => {
             pageSize: rowsDisplay,
             position: ['topRight'],
             simple: true,
+            onChange: (e: number) => {
+              enterPage(e, 28);
+            },
             current: pagination.current,
             showTotal: (total) => totalPages(Math.ceil(total / rowsDisplay))!,
           }}

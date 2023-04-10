@@ -6,7 +6,7 @@ const { Title } = Typography;
 
 const StyledHeader = styled(Header)`
   &&& {
-    background-color: #000a68;
+    background-color: #79c2d0;
     padding: 0 20px;
     min-width: max-content;
   }

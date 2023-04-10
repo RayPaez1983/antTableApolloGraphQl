@@ -1,9 +1,6 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
 
-const { Title } = Typography;
-
-const TitleTableColumn = styled(Title)`
+const TitleTableColumn = styled.h1`
   &&& {
     font-weight: 400;
     font-size: 14px;
