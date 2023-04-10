@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## This is a tranning project
 
-In this table project you can resize the columns and the drag and drop the columns and relocated
+In this table project you can resize the columns and the drag and drop the columns and relocated, also using the columns menu you can remove and add the different columns
 
 ## Conventional Commits
 
