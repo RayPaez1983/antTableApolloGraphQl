@@ -68,11 +68,23 @@ const initialState: InitialStateProps = {
 };
 export const COMPANIES_ACTIONS_TYPE = {
   SET_DATA: 'SET_DATA',
+  SET_DISABLE_BUTTON: 'SET_DISABLE_BUTTON',
+  SET_NOSELECTED_ROW_MODAL: 'SET_NOSELECTED_ROW_MODAL',
+  SET_LOADING_QUERY: 'SET_LOADING_QUERY',
+  SET_UNDO_MOMENT: 'SET_UNDO_MOMENT',
 };
 export const companiesReducer = (state: object, action: any) => {
   const { type, payload } = action;
   switch (type) {
     case COMPANIES_ACTIONS_TYPE.SET_DATA:
+      return { ...state, ...payload };
+    case COMPANIES_ACTIONS_TYPE.SET_DISABLE_BUTTON:
+      return { ...state, ...payload };
+    case COMPANIES_ACTIONS_TYPE.SET_NOSELECTED_ROW_MODAL:
+      return { ...state, ...payload };
+    case COMPANIES_ACTIONS_TYPE.SET_LOADING_QUERY:
+      return { ...state, ...payload };
+    case COMPANIES_ACTIONS_TYPE.SET_UNDO_MOMENT:
       return { ...state, ...payload };
     default:
       throw new Error(`Wrong type ${type} in userReducer`);
@@ -81,8 +93,10 @@ export const companiesReducer = (state: object, action: any) => {
 const CompaniesContext = createContext(initialState);
 
 const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ children }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [{ companiesDataSet }, dispatch] = useReducer(companiesReducer, initialState);
+  const [
+    { companiesDataSet, disableDelButton, noSelectedRowModal, loadingQuery, undoMoment },
+    dispatch,
+  ] = useReducer(companiesReducer, initialState);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 25 });
   const dataSelectedToDelete = useRef([]);
   const [getCompanies, getCompaniesResponse] = useLazyQuery(GET_COMPANIES, {
@@ -140,20 +154,18 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
   const { columns } = CompaniesColumns();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [companiesCol, setCompaniesCol] = useState(columns);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [disableDelButton, setDisableDelButon] = useState(false);
-  const [noSelectedRowModal, setNoSelectedRowModal] = useState(false);
-  const [undoMoment, setUndoMoment] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loadingQuery, setLoadingQuery] = useState(false);
   const [activeFilterValue, setActiveFilterValue] = useState(showFilterOptions[0].label);
 
   useEffect(() => {
-    setLoadingQuery(
-      getCompaniesResponse.loading ||
-        deleteOneCompanyRecordResponse.loading ||
-        deleteMultipleCompaniesRecordResponse.loading,
-    );
+    dispatch({
+      type: COMPANIES_ACTIONS_TYPE.SET_LOADING_QUERY,
+      payload: {
+        loadingQuery:
+          getCompaniesResponse.loading ||
+          deleteOneCompanyRecordResponse.loading ||
+          deleteMultipleCompaniesRecordResponse.loading,
+      },
+    });
   }, [
     getCompaniesResponse.loading,
     deleteOneCompanyRecordResponse.loading,
@@ -181,16 +193,31 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
   };
 
   const handleUndoMoment = () => {
-    setUndoMoment(!undoMoment);
+    dispatch({
+      type: COMPANIES_ACTIONS_TYPE.SET_UNDO_MOMENT,
+      payload: {
+        undoMoment: !undoMoment,
+      },
+    });
   };
 
   const handleAllDataSelection = (index: any) => {
     if (index.length === 1) {
       [dataSelectedToDelete.current] = index;
-      setDisableDelButon(false);
+      dispatch({
+        type: COMPANIES_ACTIONS_TYPE.SET_DISABLE_BUTTON,
+        payload: {
+          disableDelButton: false,
+        },
+      });
     } else {
       dataSelectedToDelete.current = index;
-      setDisableDelButon(true);
+      dispatch({
+        type: COMPANIES_ACTIONS_TYPE.SET_DISABLE_BUTTON,
+        payload: {
+          disableDelButton: true,
+        },
+      });
     }
   };
 
@@ -208,14 +235,24 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
           id: dataSelectedToDelete.current,
         },
       });
-      setDisableDelButon(false);
+      dispatch({
+        type: COMPANIES_ACTIONS_TYPE.SET_DISABLE_BUTTON,
+        payload: {
+          disableDelButton: false,
+        },
+      });
     } else {
       deleteMultipleCompaniesRecord({
         variables: {
           ids: dataSelectedToDelete.current,
         },
       });
-      setDisableDelButon(false);
+      dispatch({
+        type: COMPANIES_ACTIONS_TYPE.SET_DISABLE_BUTTON,
+        payload: {
+          disableDelButton: false,
+        },
+      });
     }
   };
 
@@ -239,7 +276,12 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
   };
 
   const handleNoSelectedRowModal = () => {
-    setNoSelectedRowModal(!noSelectedRowModal);
+    dispatch({
+      type: COMPANIES_ACTIONS_TYPE.SET_NOSELECTED_ROW_MODAL,
+      payload: {
+        noSelectedRowModal: !noSelectedRowModal,
+      },
+    });
   };
 
   const deleteRowButtonAction = () => {
