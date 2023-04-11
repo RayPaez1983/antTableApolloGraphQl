@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 import { TableOutlined } from '@ant-design/icons';
-import { TableTypes } from '../../../../types/tableTypes';
+import { TableTypes } from 'types/tableTypes';
 
 interface CustomSelectProps {
   options?: [];
