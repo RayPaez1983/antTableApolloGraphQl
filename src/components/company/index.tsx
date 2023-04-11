@@ -4,7 +4,8 @@ import CustomTable from '../commons/customTable/customTable';
 import { CustomLoadingModal } from '../commons/customModal';
 
 const Companies = () => {
-  const { companiesData, companiesCol, loadingQuery } = useContext(CompaniesContext);
+  const { companiesCol, loadingQuery, companiesDataSet } = useContext(CompaniesContext);
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const rowSelection = {
     selectedRowKeys,
@@ -23,7 +24,7 @@ const Companies = () => {
   return (
     <CustomTable
       rowSelection={rowSelection}
-      data={companiesData as unknown as []}
+      data={companiesDataSet as unknown as []}
       columns={companiesCol as []}
     />
   );

@@ -1,4 +1,12 @@
-import React, { createContext, ReactNode, useMemo, useState, useEffect, useRef } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  useReducer,
+} from 'react';
 import activeStatusFilterFunc from 'src/utils/functions/companiesFunctions';
 import CompaniesColumns from 'src/utils/tables/companiesTable';
 import CustomButton from 'src/components/commons/customButton';
@@ -14,7 +22,7 @@ interface CompaniesContextProviderProps {
 }
 
 interface InitialStateProps {
-  companiesData: { getCompanies: [] };
+  companiesDataSet: object[];
   getCompanies: () => void;
   pagination: { current: number; pageSize: number };
   companiesCol: object[];
@@ -37,9 +45,9 @@ interface InitialStateProps {
 }
 
 const initialState: InitialStateProps = {
-  companiesData: { getCompanies: [] },
   getCompanies: () => {},
   companiesCol: [],
+  companiesDataSet: [],
   handleAllDataSelection: () => {},
   noSelectedRowModal: false,
   handleNoSelectedRowModal: () => {},
@@ -58,20 +66,37 @@ const initialState: InitialStateProps = {
   lastPagesFetch: () => {},
   firstPagesFetch: () => {},
 };
-export const TABLE_ACTIONS_TYPE = {
+export const COMPANIES_ACTIONS_TYPE = {
   SET_DATA: 'SET_DATA',
 };
-
+export const companiesReducer = (state: object, action: any) => {
+  const { type, payload } = action;
+  switch (type) {
+    case COMPANIES_ACTIONS_TYPE.SET_DATA:
+      return { ...state, ...payload };
+    default:
+      throw new Error(`Wrong type ${type} in userReducer`);
+  }
+};
 const CompaniesContext = createContext(initialState);
 
 const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ children }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [{ companiesDataSet }, dispatch] = useReducer(companiesReducer, initialState);
+  console.log(companiesDataSet, 'no importa');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [companiesData, setCompaniesData] = useState<any>([]);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 25 });
   const dataSelectedToDelete = useRef([]);
   const [getCompanies, getCompaniesResponse] = useLazyQuery(GET_COMPANIES, {
     onCompleted: (data) => {
-      setCompaniesData([...companiesData, ...data.getCompanies] as []);
+      console.log(data.getCompanies, 'que esto en getCompanies');
+      dispatch({
+        type: COMPANIES_ACTIONS_TYPE.SET_DATA,
+        payload: {
+          companiesDataSet: data.getCompanies,
+        },
+      });
     },
   });
 
@@ -243,9 +268,9 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
 
   const companiesValue = useMemo(
     () => ({
-      companiesData,
       getCompanies,
       companiesCol,
+      companiesDataSet,
       handleAllDataSelection,
       noSelectedRowModal,
       handleNoSelectedRowModal,
@@ -267,8 +292,8 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
     }),
     [
       {
-        companiesData,
         getCompanies,
+        companiesDataSet,
         companiesCol,
         handleAllDataSelection,
         noSelectedRowModal,
