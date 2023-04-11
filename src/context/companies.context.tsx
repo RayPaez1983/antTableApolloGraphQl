@@ -83,9 +83,6 @@ const CompaniesContext = createContext(initialState);
 const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ children }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [{ companiesDataSet }, dispatch] = useReducer(companiesReducer, initialState);
-  console.log(companiesDataSet, 'no importa');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [companiesData, setCompaniesData] = useState<any>([]);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 25 });
   const dataSelectedToDelete = useRef([]);
   const [getCompanies, getCompaniesResponse] = useLazyQuery(GET_COMPANIES, {
@@ -198,7 +195,12 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
   };
 
   const handleOneDeleteSelection = () => {
-    setCompaniesData([]);
+    dispatch({
+      type: COMPANIES_ACTIONS_TYPE.SET_DATA,
+      payload: {
+        companiesDataSet: [],
+      },
+    });
     handleUndoMoment();
     if (typeof dataSelectedToDelete.current === 'string') {
       deleteOneCompanyRecord({
