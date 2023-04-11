@@ -90,7 +90,6 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
   const dataSelectedToDelete = useRef([]);
   const [getCompanies, getCompaniesResponse] = useLazyQuery(GET_COMPANIES, {
     onCompleted: (data) => {
-      console.log(data.getCompanies, 'que esto en getCompanies');
       dispatch({
         type: COMPANIES_ACTIONS_TYPE.SET_DATA,
         payload: {
@@ -175,7 +174,12 @@ const CompaniesContextProvider: React.FC<CompaniesContextProviderProps> = ({ chi
     if (typeof internalData === 'string') {
       throw new Error('Unrecognized operation!');
     } else {
-      setCompaniesData(internalData);
+      dispatch({
+        type: COMPANIES_ACTIONS_TYPE.SET_DATA,
+        payload: {
+          companiesDataSet: internalData,
+        },
+      });
     }
   };
 
